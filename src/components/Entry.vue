@@ -136,7 +136,8 @@ export default {
   },
   methods: {
     login() {
-        var loggedInUserObject = this.users.find(el => el.email == this.loginForm.email);
+        // Find email address in the list of all users and compare password
+        var loggedInUserObject = this.users.find(el => el.email.toLowerCase() == this.loginForm.email.toLowerCase());
         if( loggedInUserObject.password === this.loginForm.password ) {
             localStorage.setItem('loggedInUser' , JSON.stringify(this.loginForm));
             // route to home page code goes here

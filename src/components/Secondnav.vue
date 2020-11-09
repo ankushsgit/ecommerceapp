@@ -24,6 +24,13 @@
   </b-navbar>
 </div>
 </template>
+
+<script>
+export default {
+  name: 'Secondnav'
+}
+</script>
+
 <style scoped>
  .navbar.navbar-dark.bg-dark{
     background-color: #acaca4!important;

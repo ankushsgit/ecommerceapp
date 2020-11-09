@@ -18,6 +18,12 @@
   </div> 
 </template>
 
+<script>
+export default {
+  name: 'Sidenav'
+}
+</script>
+
 <style scoped>
 .b-nav-item{
     background-color: #8a8a83!important;

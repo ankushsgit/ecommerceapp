@@ -41,6 +41,13 @@
   </b-navbar>
 </div>
 </template>
+
+<script>
+export default {
+  name: 'Topnav'
+}
+</script>
+
 <style scoped>
  .navbar.navbar-dark.bg-dark{
     background-color: #8a8a83!important;

@@ -1,5 +1,5 @@
 <template>
-  <div class="container justify-content-center card p-5">
+  <div class="container justify-content-center card p-5 mt-5">
     <div class="row">
       <div class="col">
         <h1>Amazon.in</h1>
@@ -145,6 +145,7 @@ export default {
                 title: "Authenticated User",
                 autoHideDelay: 3000
             })
+            this.navigate();
         }
         else{
             this.$bvToast.toast("Invalid email or password, Please try again." , {
@@ -186,6 +187,9 @@ export default {
         this.viewState = "login";
       }, 2000);
     },
+    navigate () {
+      this.$router.push('/home')
+    } 
   },
 
   mounted() {

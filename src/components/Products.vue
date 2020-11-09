@@ -51,7 +51,7 @@
 <script>
 import axios from "axios";
 export default {
-  name: "Weather",
+  name: "Products",
   data() {
     return {
       productsList: []

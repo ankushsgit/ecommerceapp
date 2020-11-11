@@ -20,7 +20,7 @@
               <button
                 type="button"
                 class="btn btn-sm btn-outline-secondary"
-                v-on:click="navigateProductDetail(item)"
+                v-on:click="navigateProductDetail()"
               >View</button>
               
               <button
@@ -58,6 +58,12 @@ export default {
     };
   },
   methods: {
+    navigateProductDetail() {
+      this.$router.push({
+        name: "productDetails",
+        params: { id: "123" }
+      });
+    },
     getMobilesData() {
       axios
         .get("products.json")

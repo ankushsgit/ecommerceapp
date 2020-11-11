@@ -7,7 +7,7 @@
     <b-collapse id="nav-collapse"  is-nav > 
       
     
-     <b-navbar-nav>
+     <!-- <b-navbar-nav>
            <b-nav-item  href="#link-1" @click="hide">link 0</b-nav-item>
         <b-nav-item href="#link-2" @click="hide">Link 1</b-nav-item>
         <b-nav-item  href="#link-1" @click="hide">link 2</b-nav-item>
@@ -19,7 +19,7 @@
           <b-nav-item  href="#link-1" @click="hide">link 8</b-nav-item>
         <b-nav-item href="#link-2" @click="hide">Link 9</b-nav-item>
         
-     </b-navbar-nav>
+     </b-navbar-nav> -->
     </b-collapse>
   </b-navbar>
 </div>

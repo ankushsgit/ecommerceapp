@@ -1,9 +1,7 @@
 <template>
 
 <div>
-  <Navbar></Navbar>
-  <!-- <button v-on:click="getMobilesData">Mobiles</button> -->
-  <router-view></router-view>
+  <Navbar />
   <div class="row">
     <div class="col-md-3" v-for="laptopData in laptopList" :key="laptopData.id">
     <div class="cardTemplate">
@@ -53,8 +51,13 @@
 </template>
 <script>
 import axios from "axios";
+import Navbar from './Navbar';
+
 export default {
   name: "Laptops",
+  components: {
+    Navbar
+  },
   data() {
     return {
       laptopList: []

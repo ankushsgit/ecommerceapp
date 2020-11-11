@@ -6,6 +6,8 @@ import ProductDetail from './components/ProductDetail';
 import Laptops from './components/Laptops';
 import Mobiles from './components/Mobiles';
 import ElectronicAppliances from './components/ElectronicAppliances';
+import Checkout from './components/Checkout';
+import Success from './components/Success';
 
 export const routes = [
     {path: '/', name:'Entry', component: Entry},
@@ -16,4 +18,8 @@ export const routes = [
     {path: '/mobiles', name: 'Mobiles',  component: Mobiles},
     {path: '/electronicAppliances', name: 'ElectronicAppliances',  component: ElectronicAppliances},
     {path: '/products/:id',name: 'productDetails',component : ProductDetail},
+    {path: '/checkout',name: 'checkout',component : Checkout},
+    {path: '/success',name: 'success',component : Success},
+
+
 ];

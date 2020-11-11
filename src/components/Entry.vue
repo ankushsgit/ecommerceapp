@@ -136,29 +136,30 @@ export default {
   },
   methods: {
     login() {
-        // Find email address in the list of all users and compare password
-        var loggedInUserObject = this.users.find(el => el.email.toLowerCase() == this.loginForm.email.toLowerCase());
-        if( loggedInUserObject.password === this.loginForm.password ) {
-            localStorage.setItem('loggedInUser' , JSON.stringify(this.loginForm));
-            // route to home page code goes here
-            this.$bvToast.toast("Redirecting to home page" , {
-                title: "Authenticated User",
-                autoHideDelay: 3000
-            })
-            this.navigate();
-        }
-        else{
-            this.$bvToast.toast("Invalid email or password, Please try again." , {
-                title: "Un-Authorized User",
-                autoHideDelay: 3000
-            })
-        }
-
+      // Find email address in the list of all users and compare password
+      var loggedInUserObject = this.users.find(
+        (el) => el.email.toLowerCase() == this.loginForm.email.toLowerCase()
+      );
+      if (loggedInUserObject && loggedInUserObject.password === this.loginForm.password) {
+        this.loginForm["name"] = loggedInUserObject.name;
+        localStorage.setItem("loggedInUser", JSON.stringify(this.loginForm));
+        // route to home page code goes here
+        this.$bvToast.toast("Redirecting to home page", {
+          title: "Authenticated User",
+          autoHideDelay: 3000,
+        });
+        this.navigate();
+      } else {
+        this.$bvToast.toast("Invalid email or password, Please try again.", {
+          title: "Un-Authorized User",
+          autoHideDelay: 3000,
+        });
+      }
     },
     toggleView(data) {
       this.viewState = data;
-      this.loginForm =  { email: "", password: "" };
-      this.signupForm =  { name: "", email: "", password: "" };
+      this.loginForm = { email: "", password: "" };
+      this.signupForm = { name: "", email: "", password: "" };
     },
     signup() {
       // check if user is already present
@@ -187,9 +188,9 @@ export default {
         this.viewState = "login";
       }, 2000);
     },
-    navigate () {
-      this.$router.push('/home')
-    } 
+    navigate() {
+      this.$router.push("/home");
+    },
   },
 
   mounted() {
@@ -200,4 +201,3 @@ export default {
 </script>
 
 <style scoped></style>
-

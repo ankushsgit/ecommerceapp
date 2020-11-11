@@ -88,7 +88,6 @@ export default {
   methods: {},
   mounted() {
     this.productData = mobiles.data.find((el) => el._id == this.productId);
-    console.log(this.productData, this.productId);
   },
 };
 </script>

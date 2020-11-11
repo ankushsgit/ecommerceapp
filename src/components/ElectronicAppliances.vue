@@ -56,7 +56,8 @@ export default {
   name: "ElectronicAppliances",
   data() {
     return {
-      productsList: []
+      productsList: [],
+      data:''
     };
   },
   methods: {

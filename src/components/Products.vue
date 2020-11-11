@@ -20,14 +20,19 @@
               <button
                 type="button"
                 class="btn btn-sm btn-outline-secondary"
-                v-on:click="navigateProductDetail()"
+                v-on:click="navigateProductDetail(productData)"
               >View</button>
               
-              <button
+              <!-- <button
                 type="button"
                 class="btn btn-sm btn-outline-secondary"
                 v-on:click="updateEditProduct(item, item._id)"
                 v-if="loggedUser && loggedUser.isAdmin"
+              >Edit</button> -->
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-secondary"
+                v-on:click="updateEditProduct(item, item._id)"
               >Edit</button>
             </div>
             <small class="text-muted footerIcons">
@@ -58,10 +63,11 @@ export default {
     };
   },
   methods: {
-    navigateProductDetail() {
+    navigateProductDetail(data) {
+      console.log(data, 'p data')
       this.$router.push({
         name: "productDetails",
-        params: { id: "123" }
+        params: { id: data._id }
       });
     },
     getMobilesData() {

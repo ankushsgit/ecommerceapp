@@ -5,36 +5,38 @@
         <div class="col-sm-4">
           <div class="product-image">
             <div class="view hm-zoom z-depth-2" style="cursor: pointer">
-                <img src="https://images-na.ssl-images-amazon.com/images/I/616-sGx5LTL._SY879_.jpg" width="200px" height="400px"/>
-              <!-- <img
-                v-bind:src="product.productImage"
-                v-bind:alt="product.productName"
-                class="img-fluid rounded"
-                style="max-height: 700px; max-width: 127.135px;margin: auto"
-              > -->
+              <img
+                :src="productData.productImage"
+                width="200px"
+                height="400px"
+              />
             </div>
             <div class style="margin-top:15px">
               <ul class="list-group mb-3">
-                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                <li
+                  class="list-group-item d-flex justify-content-between lh-condensed"
+                >
                   <div>
                     <h6 class="my-0">Product Price</h6>
                   </div>
-                  <span
-                    class="text-muted"
-                    style="color:crimson !important"
-                  >₹ 6786786</span>
+                  <span class="text-muted" style="color:crimson !important">{{
+                    productData.productPrice
+                  }}</span>
                 </li>
-                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                <li
+                  class="list-group-item d-flex justify-content-between lh-condensed"
+                >
                   <div>
                     <h6 class="my-0">Product Seller</h6>
                   </div>
-                  <span
-                    class="text-muted"
-                    style="color:crimson !important"
-                  >Sellar Name</span>
+                  <span class="text-muted" style="color:crimson !important">{{
+                    productData.productSeller
+                  }}</span>
                 </li>
               </ul>
-              <button class="btn btn-primary" v-on:click="addToCart(product)">Add to Cart</button>
+              <button class="btn btn-primary" v-on:click="addToCart(product)">
+                Add to Cart
+              </button>
             </div>
           </div>
         </div>
@@ -45,21 +47,21 @@
               <tbody>
                 <tr>
                   <th scope="row">Product Name</th>
-                  <td>Product name</td>
+                  <td>{{ productData.productName }}</td>
                 </tr>
                 <tr>
                   <th scope="row">Product Description</th>
-                  <td>product Description</td>
+                  <td>{{ productData.productDescription }}</td>
                 </tr>
                 <tr>
                   <th scope="row">Product Category</th>
-                  <td>Category</td>
+                  <td>{{ productData.productCategory }}</td>
                 </tr>
                 <tr>
                   <th scope="row">Product Rating</th>
                   <td>
-                    <div class="stars-outer">
-                      <div class="stars-inner"></div>
+                    <div>
+                      <b-form-rating v-model="productData.productRating"></b-form-rating>
                     </div>
                   </td>
                 </tr>
@@ -68,12 +70,28 @@
           </div>
         </div>
       </div>
-     
     </div>
   </div>
 </template>
 
+<script>
+import mobiles from "../../public/mobiles.js";
 
+export default {
+  name: "ProductDetail",
+  data() {
+    return {
+      productData: {},
+      productId: this.$route.params.id,
+    };
+  },
+  methods: {},
+  mounted() {
+    this.productData = mobiles.data.find((el) => el._id == this.productId);
+    console.log(this.productData, this.productId);
+  },
+};
+</script>
 
 <style>
 .product-detail {

@@ -52,7 +52,6 @@
 </template>
 
 <script>
-// import axios from "axios";
 import mobiles from '../../public/mobiles';
 
 export default {

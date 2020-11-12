@@ -7,6 +7,8 @@ import Mobiles from './components/Mobiles';
 import ElectronicAppliances from './components/ElectronicAppliances';
 import Checkout from './components/Checkout';
 import Success from './components/Success';
+import Bagpage from './components/Bagpage';
+
 
 export const routes = [
     {path: '/', name:'Entry', component: Entry},
@@ -18,6 +20,5 @@ export const routes = [
     {path: '/products/:id',name: 'productDetails',component : ProductDetail},
     {path: '/checkout',name: 'checkout',component : Checkout},
     {path: '/success',name: 'success',component : Success},
-
-
+    {path: '/bagpage',name: 'bagpage',component : Bagpage},
 ];

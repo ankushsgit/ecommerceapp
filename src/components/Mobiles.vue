@@ -71,7 +71,7 @@ export default {
     return {
       productsList: [],
       cartCount:0,
-      pdata:[]
+      cartData:[]
     };
   },
   methods: {
@@ -85,9 +85,9 @@ export default {
       console.log(a, b);
     },
     addToCart(data) {
-      this.pdata.push(data)
+      this.cartData.push(data)
       this.cartCount = this.cartCount+1;
-      localStorage.setItem('cart',JSON.stringify(this.pdata));
+      localStorage.setItem('cart',JSON.stringify(this.cartData));
       localStorage.setItem('cartCount',JSON.stringify(this.cartCount));
       this.$bvToast.toast(" Added Cart Successful.....", {
         title: "Add to cart",

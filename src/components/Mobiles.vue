@@ -75,7 +75,7 @@ export default {
     };
   },
   methods: {
-    navigateProductDetail(data) {      
+    navigateProductDetail(data) {
       this.$router.push({
         name: "productDetails",
         params: { id: data._id },
@@ -99,7 +99,7 @@ export default {
    
     getMobilesData() {
       axios
-        .get("products.json")
+        .get("mobiles.json")
         .then((response) => (this.productsList = response.data));
     },
   },

@@ -9,7 +9,7 @@
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
       <b-collapse id="nav-collapse" is-nav>
-         <div class="auto-complete">
+        <div class="auto-complete">
         <b-input-group size="md" class="mb-2 col-md-7">
           <b-input-group-prepend is-text>
             <b-icon icon="search"></b-icon>
@@ -22,20 +22,12 @@
             @keyup="searchProduct"
           ></b-form-input>
           <span>
-            <li class="autocomplete-result" v-for="product in searchResults" :key="product._id">{{product.productName}}</li>
+            <li class="autocomplete-result" v-for="product in searchResults" :key="product._id" @click="showProduct(product)"><small> {{product.productName}} in {{product.productCategory}}</small></li>
           </span>
          
         </b-input-group>
          </div>
 
-        <b-navbar-nav>
-          <b-nav-item-dropdown text="Section" right>
-            <b-dropdown-item href="#">section 1</b-dropdown-item>
-            <b-dropdown-item href="#">section 1</b-dropdown-item>
-            <b-dropdown-item href="#">section 1</b-dropdown-item>
-            <b-dropdown-item href="#">section 1</b-dropdown-item>
-          </b-nav-item-dropdown>
-        </b-navbar-nav>
 
         <b-navbar-nav class="ml-auto">   
         <b-icon icon="cart" aria-hidden="true" @click="getCartItems"> {{cartCount}}</b-icon> 
@@ -46,7 +38,6 @@
         
         <b-navbar-nav class="ml-auto">
           <b-nav-item-dropdown right>
-            <!-- Using 'button-content' slot -->
             <template #button-content>
               <span>{{ userName }}</span>
             </template>
@@ -60,7 +51,7 @@
 </template>
 
 <script>
-import mobiles from '../../public/mobiles';
+import axios from 'axios';
 
 export default {
   //props:[this.cartCount],
@@ -73,7 +64,8 @@ export default {
       searchResults: [],
       cartCount:'0',
       cartItems:[],
-      selectedValue:''
+      selectedValue:'',
+      allProducts: []
     };
   },
   watch:{
@@ -96,15 +88,27 @@ export default {
       this.$router.push("/");
     },
     searchProduct() {
-      let data = mobiles.data;
-      console.log(data , 'exported data');
-      ( data && this.query && this.query.length > 0 ) ? this.searchResults = data.filter(el => el.productName.toLowerCase().indexOf(this.query) != -1) : this.searchResults = [];
+      ( this.allProducts && this.query && this.query.length > 1 ) ? this.searchResults = this.allProducts.filter(el => el.productName.toLowerCase().indexOf(this.query) != -1) : this.searchResults = [];
     },
+    showProduct (data) {
+      this.query = data.productName;
+      this.searchResults = [];
+      this.$router.push(`/products/${data._id}`)
+    },
+    async productsData () {
+      let [mobiles, laptops, appliances ] = await Promise.all([
+        axios.get("mobiles.json"),
+        axios.get("laptops.json"),
+        axios.get("electronics.json")
+      ])
+      this.allProducts = mobiles.data.concat(laptops.data, appliances.data);
+    }
   },
   mounted() {
     let userName = localStorage.getItem("loggedInUser");
     userName = JSON.parse(userName);
     this.userName = userName.name;
+    this.productsData();
   },
 };
 </script>

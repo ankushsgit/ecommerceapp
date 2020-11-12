@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import mobiles from "../../public/mobiles.js";
+import axios from "axios";
 import Navbar from "./Navbar";
 
 export default {
@@ -92,11 +92,34 @@ export default {
     return {
       productData: {},
       productId: this.$route.params.id,
+      allProducts: [],
     };
   },
-  methods: {},
+  watch: {
+    '$route'(to, from) {
+      console.log(to, from);
+      this.productId = to.params.id;
+      let productsArrayFunction = this.productsData.bind(this);
+      productsArrayFunction();
+    }
+  },
+  methods: {
+    async productsData() {
+      let [mobiles, laptops, appliances] = await Promise.all([
+        axios.get("mobiles.json"),
+        axios.get("laptops.json"),
+        axios.get("electronics.json"),
+      ]);
+      this.allProducts = mobiles.data.concat(laptops.data, appliances.data);
+      this.productData = this.allProducts.find(
+        (el) => el._id == this.productId
+      );
+    }
+
+  },
   mounted() {
-    this.productData = mobiles.data.find((el) => el._id == this.productId);
+    let productsArrayFunction = this.productsData.bind(this);
+    productsArrayFunction();
   },
 };
 </script>

@@ -14,11 +14,6 @@ export default {
     components: {
         Navbar,
         Cardview
-    },
-    data () {
-        return {
-
-        }
     }
 }
 </script>

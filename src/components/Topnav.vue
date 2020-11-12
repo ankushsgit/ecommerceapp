@@ -36,6 +36,14 @@
             <b-dropdown-item href="#">section 1</b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
+
+        <b-navbar-nav class="ml-auto">   
+        <b-icon icon="cart" aria-hidden="true" @click="getCartItems"> {{cartCount}}</b-icon> 
+        <b-nav-item-dropdown @click="getCartItems">  
+          <b-dropdown-item v-for="item in cartItems" :key="item._id">{{item.productName}} </b-dropdown-item>
+          </b-nav-item-dropdown>
+         </b-navbar-nav>
+        
         <b-navbar-nav class="ml-auto">
           <b-nav-item-dropdown right>
             <!-- Using 'button-content' slot -->
@@ -55,6 +63,7 @@
 import mobiles from '../../public/mobiles';
 
 export default {
+  //props:[this.cartCount],
   name: "Topnav",
   data() {
     return {
@@ -62,9 +71,23 @@ export default {
       query: "",
       products: [],
       searchResults: [],
+      cartCount:'0',
+      cartItems:[],
+      selectedValue:''
     };
   },
+  watch:{
+    cartCount:function(val){
+      this.cartCount = val;
+      alert();
+    }
+  },
   methods: {
+    getCartItems(){
+      this.cartItems =JSON.parse( localStorage.getItem('cart'));
+      //alert(this.cartItems)
+      //console.log(this.cartItems)
+    },
     showProfile() {
       this.$router.push("/profile");
     },

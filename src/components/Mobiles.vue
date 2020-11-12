@@ -31,23 +31,25 @@
                   <button
                     type="button"
                     class="btn btn-sm btn-outline-secondary"
-                    v-on:click="updateEditProduct(item, item._id)"
+
+                    v-on:click="addToCart(productData)"
                   >
-                    Edit
+                    Add to Cart
                   </button>
                 </div>
-                <small class="text-muted footerIcons">
+                <!-- <small class="text-muted footerIcons">
                   <a href="javascript:;;" class="p-2">
                     <i class="fa fa-heart"></i>
                   </a>
                   <a
                     href="javascript:;;"
                     class="p-2"
-                    v-on:click="addToCart(item)"
+                    v-on:click="addToCart(productData)"
+                    v-on:click="updateEditProduct(productData, productData._id)"
                   >
                     <i class="fa fa-shopping-cart"></i>
                   </a>
-                </small>
+                </small> -->
               </div>
             </div>
           </div>
@@ -68,11 +70,12 @@ export default {
   data() {
     return {
       productsList: [],
+      cartCount:0,
+      pdata:[]
     };
   },
   methods: {
-    navigateProductDetail(data) {
-      console.log(data, "p data");
+    navigateProductDetail(data) {      
       this.$router.push({
         name: "productDetails",
         params: { id: data._id },
@@ -82,8 +85,18 @@ export default {
       console.log(a, b);
     },
     addToCart(data) {
-      console.log(data);
+      this.pdata.push(data)
+      this.cartCount = this.cartCount+1;
+      localStorage.setItem('cart',JSON.stringify(this.pdata));
+      localStorage.setItem('cartCount',JSON.stringify(this.cartCount));
+      this.$bvToast.toast(" Added Cart Successful.....", {
+        title: "Add to cart",
+        autoHideDelay: 3000,
+      });
+      this.$emit('cart-count', this.cartCount)
+      console.log(this.cartCount +"cartCount and data "+data);
     },
+   
     getMobilesData() {
       axios
         .get("products.json")

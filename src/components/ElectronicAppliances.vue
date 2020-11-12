@@ -2,19 +2,19 @@
 <div>
     <Navbar />
   <div class="row">
-    <div class="col-md-3" v-for="productData in productsList" :key="productData.id">
+    <div class="col-md-3" v-for="eAdata in electronicAppliancesList" :key="eAdata.id">
     <div class="cardTemplate">
       <div class="card mb-4 shadow-sm">
         <img
           class="card-img-top mt-2"
-          v-bind:src="productData.productImage"
+          v-bind:src="eAdata.productImage"
           alt="Card image cap"
           style="max-height: 700px; max-width: 127.135px;margin: auto"
         >
         <div class="card-body">
-          <h6 class="card-text">{{productData.productName}}</h6>
-          <h4 class="card-text">{{productData.productPrice}}</h4>
-          <p class="card-text">{{productData.productDescription}}</p>
+          <h6 class="card-text">{{eAdata.productName}}</h6>
+          <h4 class="card-text">{{eAdata.productPrice}}</h4>
+          <p class="card-text">{{eAdata.productDescription}}</p>
           <div class="d-flex justify-content-between align-items-center">
             <div class="btn-group">
               <button
@@ -59,19 +59,19 @@ export default {
   },
   data() {
     return {
-      productsList: [],
+      electronicAppliancesList: [],
       data:''
     };
   },
   methods: {
-    getMobilesData() {
+    getElectronicesData() {
       axios
-        .get("products.json")
-        .then(response => (this.productsList = response.data));
+        .get("electronicAppliances.json")
+        .then(response => (this.electronicAppliancesList = response.data));
     }
   },
   mounted(){
-    this.getMobilesData();
+    this.getElectronicesData();
   }
 };
 </script>

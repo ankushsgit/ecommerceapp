@@ -28,13 +28,6 @@
                   >
                     View
                   </button>
-                  <button
-                    type="button"
-                    class="btn btn-sm btn-outline-secondary"
-                    v-on:click="updateEditProduct(item, item._id)"
-                  >
-                    Edit
-                  </button>
                 </div>
                 <small class="text-muted footerIcons">
                   <a href="javascript:;;" class="p-2">
@@ -72,7 +65,6 @@ export default {
   },
   methods: {
     navigateProductDetail(data) {
-      console.log(data, "p data");
       this.$router.push({
         name: "productDetails",
         params: { id: data._id },
@@ -86,7 +78,7 @@ export default {
     },
     getMobilesData() {
       axios
-        .get("products.json")
+        .get("mobiles.json")
         .then((response) => (this.productsList = response.data));
     },
   },

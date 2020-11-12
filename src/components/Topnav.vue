@@ -67,6 +67,8 @@ export default {
       ( this.allProducts && this.query && this.query.length > 1 ) ? this.searchResults = this.allProducts.filter(el => el.productName.toLowerCase().indexOf(this.query) != -1) : this.searchResults = [];
     },
     showProduct (data) {
+      this.query = data.productName;
+      this.searchResults = [];
       this.$router.push(`/products/${data._id}`)
     },
     async productsData () {

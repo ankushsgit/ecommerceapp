@@ -95,6 +95,14 @@ export default {
       allProducts: [],
     };
   },
+  watch: {
+    '$route'(to, from) {
+      console.log(to, from);
+      this.productId = to.params.id;
+      let productsArrayFunction = this.productsData.bind(this);
+      productsArrayFunction();
+    }
+  },
   methods: {
     async productsData() {
       let [mobiles, laptops, appliances] = await Promise.all([

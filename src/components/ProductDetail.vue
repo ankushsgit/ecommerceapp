@@ -1,6 +1,8 @@
 <template>
   <div>
-    <Navbar />
+    <!-- <Navbar /> -->
+    <Topnav />
+    <Sidenav />
     <div class="product-details">
       <div class="container">
         <div class="row mb-3">
@@ -36,7 +38,10 @@
                     }}</span>
                   </li>
                 </ul>
-                <button class="btn btn-primary" v-on:click="addToCart(productData)">
+                <button
+                  class="btn btn-primary"
+                  v-on:click="addToCart(productData)"
+                >
                   Add to Cart
                 </button>
               </div>
@@ -81,61 +86,44 @@
 
 <script>
 import axios from "axios";
-import Navbar from "./Navbar";
+import Topnav from './Topnav.vue';
+import Sidenav from './Sidenav.vue';
 
 export default {
   name: "ProductDetail",
   components: {
-    Navbar,
+    Topnav,
+    Sidenav
   },
   data() {
     return {
       productData: {},
       productId: this.$route.params.id,
       allProducts: [],
-      cartData:[]
     };
   },
   watch: {
-    '$route'(to, from) {
+    $route(to, from) {
       console.log(to, from);
       this.productId = to.params.id;
       let productsArrayFunction = this.productsData.bind(this);
       productsArrayFunction();
-    }
+    },
   },
   methods: {
-
-     addToCart(data) {
-      this.cartData = localStorage.getItem('cart');
-      this.cartData = JSON.parse(this.cartData)
-      this.cartData.push(data)
-      this.cartCount = this.cartCount+1;
-      
-      localStorage.setItem('cartCount',JSON.stringify(this.cartCount));
-      this.$bvToast.toast(" Added Cart Successful.....", {
-        title: "Add to cart",
-        autoHideDelay: 3000,
-      });
-
-      var old_cart = localStorage.getItem('cart');
-      var given = this.cartData;
-  
-      if (old_cart === null) {
-        localStorage.setItem('cart', JSON.stringify(this.cartData));
-      } else {
-        old_cart = JSON.parse(old_cart);
-        var new_cart = old_cart;
-         given.forEach(function(item){
-                 new_cart.push(item);
-         }),
-        localStorage.setItem('cart', JSON.stringify(new_cart)) 
-      }
-
-      this.$emit('cart-count', this.cartCount)
-      console.log(this.cartCount +"cartCount and data "+data);
+    addToCart(data) {
+      let localCartData = localStorage.getItem("cart");
+      localCartData
+        ? (localCartData = JSON.parse(localCartData))
+        : (localCartData = []);
+      let duplicate = localCartData.some(item => item._id === data._id)
+      !duplicate ? localCartData.push(data) : console.log('duplicate entry')
+      localStorage.setItem("cart", JSON.stringify(localCartData));
+      localStorage.setItem("cartCount", localCartData.length.toString());
+      window.dispatchEvent(new CustomEvent('count-changed', {
+        count: localCartData.length.toString()
+      }))
     },
-
     async productsData() {
       let [mobiles, laptops, appliances] = await Promise.all([
         axios.get("mobiles.json"),
@@ -146,8 +134,7 @@ export default {
       this.productData = this.allProducts.find(
         (el) => el._id == this.productId
       );
-    }
-
+    },
   },
   mounted() {
     let productsArrayFunction = this.productsData.bind(this);

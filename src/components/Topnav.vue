@@ -10,32 +10,42 @@
 
       <b-collapse id="nav-collapse" is-nav>
         <div class="auto-complete">
-        <b-input-group size="md" class="mb-2 col-md-7">
-          <b-input-group-prepend is-text>
-            <b-icon icon="search"></b-icon>
-          </b-input-group-prepend>
-         
-          <b-form-input
-            type="text"
-            placeholder="Search"
-            v-model="query"
-            @keyup="searchProduct"
-          ></b-form-input>
-          <span>
-            <li class="autocomplete-result" v-for="product in searchResults" :key="product._id" @click="showProduct(product)"><small> {{product.productName}} in {{product.productCategory}}</small></li>
-          </span>
-         
-        </b-input-group>
-         </div>
+          <b-input-group size="md" class="mb-2 col-md-7">
+            <b-input-group-prepend is-text>
+              <b-icon icon="search"></b-icon>
+            </b-input-group-prepend>
 
+            <b-form-input
+              type="text"
+              placeholder="Search"
+              v-model="query"
+              @keyup="searchProduct"
+            ></b-form-input>
+            <span>
+              <li
+                class="autocomplete-result"
+                v-for="product in searchResults"
+                :key="product._id"
+                @click="showProduct(product)"
+              >
+                <small>
+                  {{ product.productName }} in
+                  {{ product.productCategory }}</small
+                >
+              </li>
+            </span>
+          </b-input-group>
+        </div>
 
-        <b-navbar-nav class="ml-auto">   
-        <b-icon icon="cart" aria-hidden="true" @click="navigateToBag"> {{cartCount}}</b-icon> 
-        <b-nav-item-dropdown @click="getCartItems">  
-          <b-dropdown-item v-for="item in cartItems" :key="item._id">{{item.productName}} </b-dropdown-item>
+        <b-navbar-nav class="ml-auto">
+          <b-avatar :badge="showCartCount()" variant="" badge-variant="warning" src="https://cdn4.iconfinder.com/data/icons/shopping-35/24/Cart-1-512.png"></b-avatar> &nbsp;&nbsp; 
+          <b-nav-item-dropdown @click="getCartItems">
+            <b-dropdown-item v-for="item in cartItems" :key="item._id"
+              >{{ item.productName }}
+            </b-dropdown-item>
           </b-nav-item-dropdown>
-         </b-navbar-nav>
-        
+        </b-navbar-nav>
+
         <b-navbar-nav class="ml-auto">
           <b-nav-item-dropdown right>
             <template #button-content>
@@ -51,10 +61,9 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
-  //props:[this.cartCount],
   name: "Topnav",
   data() {
     return {
@@ -62,55 +71,16 @@ export default {
       query: "",
       products: [],
       searchResults: [],
-      cartCount:'0',
-      cartItems:[],
+      cartItems: [],
       allProducts: [],
-      laptopCart:[],
-      mobileCart:[],
-      ElectronicCart:[]
+      cartData: [],
+      cartCount: 0
     };
   },
-  watch:{
-    cartCount:function(val){
-      this.cartCount = val;
-      alert();
-    }
+  watch: {
+    
   },
   methods: {
-    getCartItems(){ 
-      
-         //  let laptop =JSON.parse( localStorage.getItem('laptopCart'));
-         
-        //  let mobile =JSON.parse( localStorage.getItem('mobileCart'));
-          
-         /// let Elec =JSON.parse( localStorage.getItem('ElectronicCart'));
-      
-        //  this.cartItems.push(JSON.stringify(this.ElectronicCart));
-      
-      this.cartItems =JSON.parse( localStorage.getItem('cart'));
-     //this.cartItems = JSON.parse(this.cartItems);
-      //alert(this.cartItems)
-      //console.log(this.cartItems)
-    },
-
-  // cartLogic( data){
-
-  //   localStorage.setItem('cart',JSON.stringify(Elec));
-  //   var old_products = localStorage.getItem('cart');
-  //   var coords = [{x: 32, y: 24}, {x: 21, y: 43}];
-  //   if (old_products === null) {
-  //     localStorage.setItem('cart', JSON.stringify(data));
-  //   } else {
-  //     old_coords = JSON.parse(old_coords);
-  //     var new_coords = old_coords;
-  //     coords.forEach(function(item){
-  //         new_coords.push(item);             
-  //     }) 
-
-  //     localStorage.setItem('coords', new_coords);  
-  //   }
-  // },
-
     showProfile() {
       this.$router.push("/profile");
     },
@@ -119,23 +89,33 @@ export default {
       this.$router.push("/");
     },
     searchProduct() {
-      ( this.allProducts && this.query && this.query.length > 1 ) ? this.searchResults = this.allProducts.filter(el => el.productName.toLowerCase().indexOf(this.query) != -1) : this.searchResults = [];
+      this.allProducts && this.query && this.query.length > 1
+        ? (this.searchResults = this.allProducts.filter(
+            (el) => el.productName.toLowerCase().indexOf(this.query) != -1
+          ))
+        : (this.searchResults = []);
     },
-    showProduct (data) {
+    showProduct(data) {
       this.query = data.productName;
       this.searchResults = [];
-      this.$router.push(`/products/${data._id}`)
+      this.$router.push(`/products/${data._id}`);
     },
-    async productsData () {
-      let [mobiles, laptops, appliances ] = await Promise.all([
+    async productsData() {
+      let [mobiles, laptops, appliances] = await Promise.all([
         axios.get("mobiles.json"),
         axios.get("laptops.json"),
-        axios.get("electronics.json")
-      ])
+        axios.get("electronics.json"),
+      ]);
       this.allProducts = mobiles.data.concat(laptops.data, appliances.data);
     },
-    navigateToBag () {
-      this.$router.push('/bagpage')
+    navigateToBag() {
+      this.$router.push("/bagpage");
+    },
+    getCartItems() {
+      this.cartItems = JSON.parse(localStorage.getItem("cart"));
+    },
+    showCartCount () {
+      return (localStorage.getItem('cartCount'))
     }
   },
   mounted() {
@@ -143,6 +123,7 @@ export default {
     userName = JSON.parse(userName);
     this.userName = userName.name;
     this.productsData();
+    window.addEventListener('count-changed', event => this.cartCount = event.count)
   },
 };
 </script>
@@ -153,27 +134,27 @@ export default {
   padding: 1% 1%;
 }
 .autocomplete {
-    position: relative;
-    width: 130px;
-  }
+  position: relative;
+  width: 130px;
+}
 
-  .autocomplete-results {
-    padding: 0;
-    margin: 0;
-    border: 1px solid #eeeeee;
-    height: 120px;
-    overflow: auto;
-  }
+.autocomplete-results {
+  padding: 0;
+  margin: 0;
+  border: 1px solid #eeeeee;
+  height: 120px;
+  overflow: auto;
+}
 
-  .autocomplete-result {
-    list-style: none;
-    text-align: left;
-    padding: 4px 2px;
-    cursor: pointer;
-  }
+.autocomplete-result {
+  list-style: none;
+  text-align: left;
+  padding: 4px 2px;
+  cursor: pointer;
+}
 
-  .autocomplete-result:hover {
-    background-color: #4AAE9B;
-    color: white;
-  }
+.autocomplete-result:hover {
+  background-color: #4aae9b;
+  color: white;
+}
 </style>

@@ -1,6 +1,7 @@
 <template>
   <div>
-    <Navbar />
+    <Topnav />
+    <Sidenav />
     <div class="row col-sm-12" v-for="productData in cartItems" :key="productData._id">
       <div class="col-sm-2">
         <img
@@ -19,12 +20,14 @@
   </div>
 </template>
 <script>
-import Navbar from "./Navbar";
+import Topnav from './Topnav.vue';
+import Sidenav from './Sidenav.vue';
 
 export default {
   name: "Mobiles",
   components: {
-    Navbar
+    Topnav,
+    Sidenav
   },
   data() {
     return {

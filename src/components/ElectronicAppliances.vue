@@ -28,27 +28,14 @@
                   >
                     View
                   </button>
-                    <button
+                  <button
                     type="button"
                     class="btn btn-sm btn-outline-secondary"
-
                     v-on:click="addToCart(productData)"
                   >
                     Add to Cart
                   </button>
                 </div>
-                <!-- <small class="text-muted footerIcons">
-                  <a href="javascript:;;" class="p-2">
-                    <i class="fa fa-heart"></i>
-                  </a>
-                  <a
-                    href="javascript:;;"
-                    class="p-2"
-                    v-on:click="addToCart(productData)"
-                  >
-                    <i class="fa fa-shopping-cart"></i>
-                  </a>
-                </small> -->
               </div>
             </div>
           </div>
@@ -69,36 +56,21 @@ export default {
   data() {
     return {
       productsList: [],
-      cartData:[]
     };
   },
   methods: {
-  addToCart(data) {
-      
-      this.cartData.push(data)
-      this.cartCount = this.cartCount+1;
-      
-      var old_cart = localStorage.getItem('cart');
-      var given = this.cartData;
-  
-      if (old_cart === null) {
-        localStorage.setItem('cart', JSON.stringify(this.cartData));
-      } else {
-        old_cart = JSON.parse(old_cart);
-        var new_cart = old_cart;
-         given.forEach(function(item){
-                 new_cart.push(item);
-         }),
-        localStorage.setItem('cart', JSON.stringify(new_cart)) 
-      }
-
-      localStorage.setItem('cartCount',JSON.stringify(this.cartCount));
-      this.$bvToast.toast(" Added Cart Successful.....", {
-        title: "Add to cart",
-        autoHideDelay: 3000,
-      });
-      this.$emit('cart-count', this.cartCount)
-      console.log(this.cartCount +"cartCount and data "+data);
+    addToCart(data) {
+      let localCartData = localStorage.getItem("cart");
+      localCartData
+        ? (localCartData = JSON.parse(localCartData))
+        : (localCartData = []);
+      let duplicate = localCartData.some(item => item._id === data._id)
+      !duplicate ? localCartData.push(data) : console.log('duplicate entry')
+      localStorage.setItem("cart", JSON.stringify(localCartData));
+      localStorage.setItem("cartCount", localCartData.length.toString());
+      window.dispatchEvent(new CustomEvent('count-changed', {
+        count: localCartData.length.toString()
+      }))
     },
     getElectronicesData() {
       axios

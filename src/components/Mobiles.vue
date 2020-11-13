@@ -87,8 +87,22 @@ export default {
     addToCart(data) {
       this.cartData.push(data)
       this.cartCount = this.cartCount+1;
-      localStorage.setItem('cart',JSON.stringify(this.cartData));
       localStorage.setItem('cartCount',JSON.stringify(this.cartCount));
+
+    var old_cart = localStorage.getItem('cart');
+      var given = this.cartData;
+  
+      if (old_cart === null) {
+        localStorage.setItem('cart', JSON.stringify(this.cartData));
+      } else {
+        old_cart = JSON.parse(old_cart);
+        var new_cart = old_cart;
+         given.forEach(function(item){
+                 new_cart.push(item);
+         }),
+        localStorage.setItem('cart', JSON.stringify(new_cart)) 
+      }
+
       this.$bvToast.toast(" Added Cart Successful.....", {
         title: "Add to cart",
         autoHideDelay: 3000,

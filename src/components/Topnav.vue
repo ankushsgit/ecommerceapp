@@ -64,8 +64,10 @@ export default {
       searchResults: [],
       cartCount:'0',
       cartItems:[],
-      selectedValue:'',
-      allProducts: []
+      allProducts: [],
+      laptopCart:[],
+      mobileCart:[],
+      ElectronicCart:[]
     };
   },
   watch:{
@@ -75,11 +77,40 @@ export default {
     }
   },
   methods: {
-    getCartItems(){
+    getCartItems(){ 
+      
+         //  let laptop =JSON.parse( localStorage.getItem('laptopCart'));
+         
+        //  let mobile =JSON.parse( localStorage.getItem('mobileCart'));
+          
+         /// let Elec =JSON.parse( localStorage.getItem('ElectronicCart'));
+      
+        //  this.cartItems.push(JSON.stringify(this.ElectronicCart));
+      
       this.cartItems =JSON.parse( localStorage.getItem('cart'));
+     //this.cartItems = JSON.parse(this.cartItems);
       //alert(this.cartItems)
       //console.log(this.cartItems)
     },
+
+  // cartLogic( data){
+
+  //   localStorage.setItem('cart',JSON.stringify(Elec));
+  //   var old_products = localStorage.getItem('cart');
+  //   var coords = [{x: 32, y: 24}, {x: 21, y: 43}];
+  //   if (old_products === null) {
+  //     localStorage.setItem('cart', JSON.stringify(data));
+  //   } else {
+  //     old_coords = JSON.parse(old_coords);
+  //     var new_coords = old_coords;
+  //     coords.forEach(function(item){
+  //         new_coords.push(item);             
+  //     }) 
+
+  //     localStorage.setItem('coords', new_coords);  
+  //   }
+  // },
+
     showProfile() {
       this.$router.push("/profile");
     },

@@ -6,9 +6,9 @@
         <div class="p-3 color">
           <nav class="mb-3">
             <b-nav vertical>
-              <router-link to='/laptops'>Laptops</router-link>
-              <router-link to='/mobiles'>Mobiles</router-link>
-              <router-link to='/electronicAppliances'>Electronic Appliances</router-link>
+              <router-link @click="changeView('laptops')" to='/laptops'>Laptops</router-link>
+              <router-link @click="changeView('mobiles')"  to='/mobiles'>Mobiles</router-link>
+              <router-link @click="changeView('electronicAppliances')"  to='/electronicAppliances'>Electronic Appliances</router-link>
             </b-nav>
           </nav>
         </div>
@@ -18,7 +18,12 @@
 </template>
 <script>
 export default {
-  name: 'Sidenav'
+  name: 'Sidenav',
+  methods:{
+    changeView(viewPage){
+      localStorage.setItem('viewPage',JSON.stringify(viewPage));
+    }
+  }
 }
 </script>
 <style scoped>

@@ -30,7 +30,7 @@
 
 
         <b-navbar-nav class="ml-auto">   
-        <b-icon icon="cart" aria-hidden="true" @click="getCartItems"> {{cartCount}}</b-icon> 
+        <b-icon icon="cart" aria-hidden="true" @click="navigateToBag"> {{cartCount}}</b-icon> 
         <b-nav-item-dropdown @click="getCartItems">  
           <b-dropdown-item v-for="item in cartItems" :key="item._id">{{item.productName}} </b-dropdown-item>
           </b-nav-item-dropdown>
@@ -133,6 +133,9 @@ export default {
         axios.get("electronics.json")
       ])
       this.allProducts = mobiles.data.concat(laptops.data, appliances.data);
+    },
+    navigateToBag () {
+      this.$router.push('/bagpage')
     }
   },
   mounted() {

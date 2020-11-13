@@ -107,7 +107,8 @@ export default {
   methods: {
 
      addToCart(data) {
-      
+      this.cartData = localStorage.getItem('cart');
+      this.cartData = JSON.parse(this.cartData)
       this.cartData.push(data)
       this.cartCount = this.cartCount+1;
       

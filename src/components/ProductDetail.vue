@@ -36,7 +36,7 @@
                     }}</span>
                   </li>
                 </ul>
-                <button class="btn btn-primary" v-on:click="addToCart(product)">
+                <button class="btn btn-primary" v-on:click="addToCart(productData)">
                   Add to Cart
                 </button>
               </div>
@@ -93,6 +93,7 @@ export default {
       productData: {},
       productId: this.$route.params.id,
       allProducts: [],
+      cartData:[]
     };
   },
   watch: {
@@ -104,6 +105,21 @@ export default {
     }
   },
   methods: {
+
+     addToCart(data) {
+      
+      this.cartData.push(data)
+      this.cartCount = this.cartCount+1;
+      localStorage.setItem('cart',JSON.stringify(this.cartData));
+      localStorage.setItem('cartCount',JSON.stringify(this.cartCount));
+      this.$bvToast.toast(" Added Cart Successful.....", {
+        title: "Add to cart",
+        autoHideDelay: 3000,
+      });
+      this.$emit('cart-count', this.cartCount)
+      console.log(this.cartCount +"cartCount and data "+data);
+    },
+
     async productsData() {
       let [mobiles, laptops, appliances] = await Promise.all([
         axios.get("mobiles.json"),

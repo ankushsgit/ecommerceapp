@@ -28,8 +28,16 @@
                   >
                     View
                   </button>
+                   <button
+                    type="button"
+                    class="btn btn-sm btn-outline-secondary"
+
+                    v-on:click="addToCart(laptopData)"
+                  >
+                    Add to Cart
+                  </button>
                 </div>
-                <small class="text-muted footerIcons">
+                <!-- <small class="text-muted footerIcons">
                   <a href="javascript:;;" class="p-2">
                     <i class="fa fa-heart"></i>
                   </a>
@@ -40,7 +48,7 @@
                   >
                     <i class="fa fa-shopping-cart"></i>
                   </a>
-                </small>
+                </small> -->
               </div>
             </div>
           </div>
@@ -61,9 +69,25 @@ export default {
   data() {
     return {
       laptopList: [],
+      cartData:[]
     };
   },
   methods: {
+
+    addToCart(data) {
+      
+      this.cartData.push(data)
+      this.cartCount = this.cartCount+1;
+      localStorage.setItem('cart',JSON.stringify(this.cartData));
+      localStorage.setItem('cartCount',JSON.stringify(this.cartCount));
+      this.$bvToast.toast(" Added Cart Successful.....", {
+        title: "Add to cart",
+        autoHideDelay: 3000,
+      });
+      this.$emit('cart-count', this.cartCount)
+      console.log(this.cartCount +"cartCount and data "+data);
+    },
+
     getMobilesData() {
       axios
         .get("laptops.json")

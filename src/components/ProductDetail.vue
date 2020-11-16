@@ -120,9 +120,7 @@ export default {
       !duplicate ? localCartData.push(data) : console.log('duplicate entry')
       localStorage.setItem("cart", JSON.stringify(localCartData));
       localStorage.setItem("cartCount", localCartData.length.toString());
-      window.dispatchEvent(new CustomEvent('count-changed', {
-        count: localCartData.length.toString()
-      }))
+      this.$store.commit('cartCount', localCartData.length.toString())
     },
     async productsData() {
       let [mobiles, laptops, appliances] = await Promise.all([

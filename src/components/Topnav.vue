@@ -38,11 +38,21 @@
         </div>
 
         <b-navbar-nav class="ml-auto">
-          <b-avatar :badge="showCartCount()" variant="" badge-variant="warning" src="https://cdn4.iconfinder.com/data/icons/shopping-35/24/Cart-1-512.png"></b-avatar> &nbsp;&nbsp; 
-          <b-nav-item-dropdown @click="getCartItems">
-            <b-dropdown-item v-for="item in cartItems" :key="item._id"
-              >{{ item.productName }}
-            </b-dropdown-item>
+          <b-avatar
+            :badge="showCartCount()"
+            variant=""
+            badge-variant="warning"
+            src="https://cdn4.iconfinder.com/data/icons/shopping-35/24/Cart-1-512.png"
+          ></b-avatar>
+          &nbsp;&nbsp;
+          <b-nav-item-dropdown>
+            <span v-if="cartItems.length > 0">
+            <a v-for="item in cartItems" :key="item._id">
+              <p  style="width:500px"> {{ item.productName }} | <span class="ml-auto" @click.stop="removeItemFromCart(item)"><b-icon icon="trash"></b-icon></span> </p></a>
+            </span>
+            <span v-else>
+              <p>Cart is empty</p>
+            </span>
           </b-nav-item-dropdown>
         </b-navbar-nav>
 
@@ -73,13 +83,9 @@ export default {
       searchResults: [],
       cartItems: [],
       allProducts: [],
-      cartData: [],
-      cartCount: 0
     };
   },
-  watch: {
-    
-  },
+  watch: {},
   methods: {
     showProfile() {
       this.$router.push("/profile");
@@ -113,9 +119,16 @@ export default {
     },
     getCartItems() {
       this.cartItems = JSON.parse(localStorage.getItem("cart"));
+      console.log(this.cartItems);
     },
-    showCartCount () {
-      return (localStorage.getItem('cartCount'))
+    showCartCount() {
+      return this.$store.getters.cartCount;
+    },
+    removeItemFromCart (data) {
+      this.cartItems = this.cartItems.filter(item => item._id != data._id)
+      localStorage.setItem('cart', JSON.stringify(this.cartItems))
+      localStorage.setItem('cartCount', this.cartItems.length.toString())
+      this.$store.commit('cartCount', this.cartItems.length.toString())
     }
   },
   mounted() {
@@ -123,7 +136,10 @@ export default {
     userName = JSON.parse(userName);
     this.userName = userName.name;
     this.productsData();
-    window.addEventListener('count-changed', event => this.cartCount = event.count)
+    // eslint-disable-next-line no-unused-vars
+    this.$root.$on("bv::dropdown::show", (bvEvent) => {
+      this.getCartItems()
+    });
   },
 };
 </script>

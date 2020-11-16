@@ -196,6 +196,7 @@ export default {
   mounted() {
     this.users = localStorage.getItem("users");
     this.users = this.users ? JSON.parse(this.users) : [];
+    console.log(this.$store.state)
   },
 };
 </script>

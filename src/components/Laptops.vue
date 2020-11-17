@@ -5,7 +5,7 @@
       <div
         class="col-md-3"
         v-for="laptopData in laptopList"
-        :key="laptopData._id"
+        :key="laptopData.id"
       >
         <div class="cardTemplate">
           <div class="card mb-4 shadow-sm">
@@ -64,7 +64,7 @@ export default {
       localCartData
         ? (localCartData = JSON.parse(localCartData))
         : (localCartData = []);
-      let duplicate = localCartData.some((item) => item._id === data._id);
+      let duplicate = localCartData.some((item) => item.id === data.id);
       !duplicate ? localCartData.push(data) : console.log("duplicate entry");
       localStorage.setItem("cart", JSON.stringify(localCartData));
       localStorage.setItem("cartCount", localCartData.length.toString());
@@ -73,13 +73,13 @@ export default {
 
     getMobilesData() {
       axios
-        .get("laptops.json")
+        .get("http://localhost:3000/laptops")
         .then((response) => (this.laptopList = response.data));
     },
     navigateProductDetail(data) {
       this.$router.push({
         name: "productDetails",
-        params: { id: data._id },
+        params: { id: data.id },
       });
     },
   },

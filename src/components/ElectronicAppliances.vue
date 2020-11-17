@@ -64,7 +64,7 @@ export default {
       localCartData
         ? (localCartData = JSON.parse(localCartData))
         : (localCartData = []);
-      let duplicate = localCartData.some(item => item._id === data._id)
+      let duplicate = localCartData.some(item => item.id === data.id)
       !duplicate ? localCartData.push(data) : console.log('duplicate entry')
       localStorage.setItem("cart", JSON.stringify(localCartData));
       localStorage.setItem("cartCount", localCartData.length.toString());
@@ -72,13 +72,13 @@ export default {
     },
     getElectronicesData() {
       axios
-        .get("electronics.json")
+        .get("http://localhost:3000/electronics")
         .then((response) => (this.productsList = response.data));
     },
     navigateProductDetail(data) {
       this.$router.push({
         name: "productDetails",
-        params: { id: data._id },
+        params: { id: data.id },
       });
     },
   },

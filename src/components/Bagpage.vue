@@ -2,7 +2,7 @@
   <div>
     <Topnav />
     <Sidenav />
-    <div class="row col-sm-12" v-for="productData in cartItems" :key="productData._id">
+    <div class="row col-sm-12" v-for="productData in cartItems" :key="productData.id">
       <div class="col-sm-2">
         <img
           class="card-img-top mt-2"

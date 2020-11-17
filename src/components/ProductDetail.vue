@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- <Navbar /> -->
     <Topnav />
     <Sidenav />
     <div class="product-details">
@@ -116,7 +115,7 @@ export default {
       localCartData
         ? (localCartData = JSON.parse(localCartData))
         : (localCartData = []);
-      let duplicate = localCartData.some(item => item._id === data._id)
+      let duplicate = localCartData.some(item => item.id === data.id)
       !duplicate ? localCartData.push(data) : console.log('duplicate entry')
       localStorage.setItem("cart", JSON.stringify(localCartData));
       localStorage.setItem("cartCount", localCartData.length.toString());
@@ -124,13 +123,13 @@ export default {
     },
     async productsData() {
       let [mobiles, laptops, appliances] = await Promise.all([
-        axios.get("mobiles.json"),
-        axios.get("laptops.json"),
-        axios.get("electronics.json"),
+        axios.get("http://localhost:3000/mobiles"),
+        axios.get("http://localhost:3000/laptops"),
+        axios.get("http://localhost:3000/electronics"),
       ]);
       this.allProducts = mobiles.data.concat(laptops.data, appliances.data);
       this.productData = this.allProducts.find(
-        (el) => el._id == this.productId
+        (el) => el.id == this.productId
       );
     },
   },

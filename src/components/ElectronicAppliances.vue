@@ -72,7 +72,7 @@ export default {
     },
     getElectronicesData() {
       axios
-        .get("electronics.json")
+        .get("http://localhost:3000/electronicAppliances")
         .then((response) => (this.productsList = response.data));
     },
     navigateProductDetail(data) {

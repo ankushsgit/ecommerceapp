@@ -73,7 +73,7 @@ export default {
 
     getMobilesData() {
       axios
-        .get("laptops.json")
+        .get("http://localhost:3000/laptops")
         .then((response) => (this.laptopList = response.data));
     },
     navigateProductDetail(data) {

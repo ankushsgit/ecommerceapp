@@ -124,9 +124,9 @@ export default {
     },
     async productsData() {
       let [mobiles, laptops, appliances] = await Promise.all([
-        axios.get("mobiles.json"),
-        axios.get("laptops.json"),
-        axios.get("electronics.json"),
+        axios.get("http://localhost:3000/mobiles"),
+        axios.get("http://localhost:3000/laptops"),
+        axios.get("http://localhost:3000/electronics"),
       ]);
       this.allProducts = mobiles.data.concat(laptops.data, appliances.data);
       this.productData = this.allProducts.find(

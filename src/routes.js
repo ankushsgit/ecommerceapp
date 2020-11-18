@@ -8,7 +8,7 @@ import ElectronicAppliances from './components/ElectronicAppliances';
 import Checkout from './components/Checkout';
 import Success from './components/Success';
 import Bagpage from './components/Bagpage';
-
+import AddProducts from "./components/AddProducts";
 
 export const routes = [
     {path: '/', name:'Entry', component: Entry},
@@ -21,4 +21,5 @@ export const routes = [
     {path: '/checkout',name: 'checkout',component : Checkout},
     {path: '/success',name: 'success',component : Success},
     {path: '/bagpage',name: 'bagpage',component : Bagpage},
+    {path: '/addProducts',name: 'addproduct',component : AddProducts},
 ];

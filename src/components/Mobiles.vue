@@ -70,7 +70,7 @@ export default {
     },
     getMobilesData() {
       axios
-        .get("mobiles.json")
+        .get("http://localhost:3000/mobiles")
         .then((response) => (this.productsList = response.data));
     },
     addToCart(data) {

@@ -4,10 +4,10 @@
     <Sidenav />
     <div class="container justify-content-center mt-5">
       <b-card header="Profile" class="text-center">
-          <b-card-text>
-            <p>Name : {{ userDetails.name }}</p>
-            <p>Email : {{ userDetails.email }}</p>
-          </b-card-text>
+        <b-card-text>
+          <p>Name : {{ userDetails.name }}</p>
+          <p>Email : {{ userDetails.email }}</p>
+        </b-card-text>
       </b-card>
     </div>
   </div>

@@ -8,37 +8,27 @@
           <div class="col-sm-4">
             <div class="product-image">
               <div class="view hm-zoom z-depth-2" style="cursor: pointer">
-                <img
-                  :src="productData.productImage"
-                  width="200px"
-                  height="400px"
-                />
+                <img :src="productData.productImage" width="200px" height="400px" />
               </div>
-              <div class style="margin-top:15px">
+              <div class style="margin-top: 15px">
                 <ul class="list-group mb-3">
-                  <li
-                    class="list-group-item d-flex justify-content-between lh-condensed"
-                  >
+                  <li class="list-group-item d-flex justify-content-between lh-condensed">
                     <div>
                       <h6 class="my-0">Product Price</h6>
                     </div>
-                    <span class="text-muted" style="color:crimson !important">{{
-                      productData.productPrice
-                    }}</span>
+                    <span class="text-muted" style="color: crimson !important">{{ productData.productPrice }}</span>
                   </li>
-                  <li
-                    class="list-group-item d-flex justify-content-between lh-condensed"
-                  >
+                  <li class="list-group-item d-flex justify-content-between lh-condensed">
                     <div>
                       <h6 class="my-0">Product Seller</h6>
                     </div>
-                    <span class="text-muted" style="color:crimson !important">{{
-                      productData.productSeller
-                    }}</span>
+                    <span class="text-muted" style="color: crimson !important">{{ productData.productSeller }}</span>
                   </li>
                 </ul>
-                <button class="btn btn-primary" v-on:click="addToCart(productData)" v-if="!this.isAdded"> Add to Cart </button>
-                <button class="btn btn-secondary" disabled v-else> Added </button>
+                <button class="btn btn-primary" v-on:click="addToCart(productData)" v-if="!this.isAdded">
+                  Add to Cart
+                </button>
+                <button class="btn btn-secondary" disabled v-else>Added</button>
               </div>
             </div>
           </div>
@@ -63,9 +53,7 @@
                     <th scope="row">Product Rating</th>
                     <td>
                       <div>
-                        <b-form-rating
-                          v-model="productData.productRating"
-                        ></b-form-rating>
+                        <b-form-rating v-model="productData.productRating"></b-form-rating>
                       </div>
                     </td>
                   </tr>
@@ -81,21 +69,21 @@
 
 <script>
 import axios from "axios";
-import Topnav from './Topnav.vue';
-import Sidenav from './Sidenav.vue';
+import Topnav from "./Topnav.vue";
+import Sidenav from "./Sidenav.vue";
 
 export default {
   name: "ProductDetail",
   components: {
     Topnav,
-    Sidenav
+    Sidenav,
   },
   data() {
     return {
       productData: {},
       productId: this.$route.params.id,
       allProducts: [],
-      isAdded: null
+      isAdded: null,
     };
   },
   watch: {
@@ -112,11 +100,11 @@ export default {
       localCartData
         ? (localCartData = JSON.parse(localCartData))
         : (localCartData = []);
-      let duplicate = localCartData.some(item => item.id === data.id)
-      !duplicate ? localCartData.push(data) : console.log('duplicate entry')
+      let duplicate = localCartData.some((item) => item.id === data.id);
+      !duplicate ? localCartData.push(data) : console.log("duplicate entry");
       localStorage.setItem("cart", JSON.stringify(localCartData));
       localStorage.setItem("cartCount", localCartData.length.toString());
-      this.$store.commit('cartCount', localCartData.length.toString())
+      this.$store.commit("cartCount", localCartData.length.toString());
       this.checkAddedProducts();
     },
     async productsData() {
@@ -126,16 +114,14 @@ export default {
         axios.get("http://localhost:3000/electronics"),
       ]);
       this.allProducts = mobiles.data.concat(laptops.data, appliances.data);
-      this.productData = this.allProducts.find(
-        (el) => el.id == this.productId
-      );
+      this.productData = this.allProducts.find((el) => el.id == this.productId);
     },
-    checkAddedProducts () {
-    let added = localStorage.getItem('cart');
-    added = JSON.parse(added);
-    let isAdded = added.find(item => item.id == this.$route.params.id )
-    isAdded ? this.isAdded = true : false; 
-    }
+    checkAddedProducts() {
+      let added = localStorage.getItem("cart");
+      added = JSON.parse(added);
+      let isAdded = added.find((item) => item.id == this.$route.params.id);
+      isAdded ? (this.isAdded = true) : false;
+    },
   },
   mounted() {
     let productsArrayFunction = this.productsData.bind(this);

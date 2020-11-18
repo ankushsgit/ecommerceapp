@@ -2,33 +2,23 @@
   <div>
     <Navbar />
     <div class="row mx-2 my-2">
-      <div
-        class="col-md-3 outerview"
-        v-for="productData in productsList"
-        :key="productData.id"
-      >
+      <div class="col-md-3 outerview" v-for="productData in productsList" :key="productData.id">
         <div class="cardTemplate outer1">
           <div class="card mb-4 outer2">
-            <img
-              class="card-img-top mt-2"
-              v-bind:src="productData.productImage"
-              alt="Card image cap"
-              style="max-height: 700px; max-width: 127.135px;margin: auto"
-            />
+            <img class="card-img-top mt-2" v-bind:src="productData.productImage" alt="Card image cap"
+              style="max-height: 700px; max-width: 127.135px;margin: auto" />
             <div class="card-body">
               <h6 class="card-text">{{ productData.productName }}</h6>
               <h4 class="card-text">{{ productData.productPrice }}</h4>
               <p class="card-text">{{ productData.productDescription }}</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <button
-                    type="button"
-                    class="btn btn-sm btn-outline-secondary"
-                    v-on:click="navigateProductDetail(productData)"
-                  >
+                  <button type="button" class="btn btn-sm btn-outline-secondary"
+                    v-on:click="navigateProductDetail(productData)">
                     View
                   </button>
-                  <button v-if="!productData.isAdded" type="button" class="btn btn-sm btn-outline-secondary" v-on:click="addToCart(productData)"> Add to Cart </button>
+                  <button v-if="!productData.isAdded" type="button" class="btn btn-sm btn-outline-secondary"
+                    v-on:click="addToCart(productData)"> Add to Cart </button>
                   <button class="btn btn-sm btn-outline-secondary" disabled v-else>Added</button>
                 </div>
               </div>

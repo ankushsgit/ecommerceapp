@@ -6,7 +6,7 @@
       </div>
     </div>
 
-    <!-- Login view starts here -->
+    <!-- login view starts here --> 
     <div v-if="viewState == 'login'">
       <div class="row mt-4">
         <div class="col">
@@ -15,31 +15,15 @@
       </div>
 
       <b-form>
-        <b-form-group
-          id="email_address"
-          label="Email address:"
-          label-for="email address"
-          description="We'll never share your email with anyone else."
-        >
-          <b-form-input
-            id="email_address"
-            v-model="loginForm.email"
-            type="email"
-            required
-            placeholder="Enter email"
-            class="form-control"
-          ></b-form-input>
+        <b-form-group id="email_address" label="Email address:" label-for="email address"
+          description="We'll never share your email with anyone else.">
+          <b-form-input id="email_address" v-model="loginForm.email" type="email" required placeholder="Enter email"
+            class="form-control"></b-form-input>
         </b-form-group>
 
         <b-form-group id="password" label="Password" label-for="password">
-          <b-form-input
-            id="password"
-            v-model="loginForm.password"
-            required
-            type="password"
-            placeholder="Enter password"
-            class="form-control"
-          ></b-form-input>
+          <b-form-input id="password" v-model="loginForm.password" required type="password" placeholder="Enter password"
+            class="form-control"></b-form-input>
         </b-form-group>
         <div class="row">
           <div class="col-1">
@@ -50,9 +34,7 @@
         <div class="row">
           <div class="col">
             <p>Dont have an account ?</p>
-            <b-button variant="secondary" @click="toggleView('signup')"
-              >Signup Instead</b-button
-            >
+            <b-button variant="secondary" @click="toggleView('signup')">Signup Instead</b-button>
           </div>
         </div>
       </b-form>
@@ -68,41 +50,19 @@
 
       <b-form>
         <b-form-group id="username" label="Name" label-for="name">
-          <b-form-input
-            id="username"
-            v-model="signupForm.name"
-            type="text"
-            required
-            placeholder="Enter name"
-            class="form-control"
-          ></b-form-input>
+          <b-form-input id="username" v-model="signupForm.name" type="text" required placeholder="Enter name"
+            class="form-control"></b-form-input>
         </b-form-group>
 
-        <b-form-group
-          id="email_address"
-          label="Email address:"
-          label-for="email address"
-          description="We'll never share your email with anyone else."
-        >
-          <b-form-input
-            id="email_address"
-            v-model="signupForm.email"
-            type="email"
-            required
-            placeholder="Enter email"
-            class="form-control"
-          ></b-form-input>
+        <b-form-group id="email_address" label="Email address:" label-for="email address"
+          description="We'll never share your email with anyone else.">
+          <b-form-input id="email_address" v-model="signupForm.email" type="email" required placeholder="Enter email"
+            class="form-control"></b-form-input>
         </b-form-group>
 
         <b-form-group id="password" label="Password" label-for="password">
-          <b-form-input
-            id="password"
-            v-model="signupForm.password"
-            required
-            type="password"
-            placeholder="Enter password"
-            class="form-control"
-          ></b-form-input>
+          <b-form-input id="password" v-model="signupForm.password" required type="password"
+            placeholder="Enter password" class="form-control"></b-form-input>
         </b-form-group>
         <div class="row">
           <div class="col-1">
@@ -113,9 +73,7 @@
         <div class="row">
           <div class="col">
             <p>Already a user ?</p>
-            <b-button variant="secondary" @click="toggleView('login')"
-              >Login Instead</b-button
-            >
+            <b-button variant="secondary" @click="toggleView('login')">Login Instead</b-button>
           </div>
         </div>
       </b-form>

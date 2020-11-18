@@ -10,35 +10,40 @@
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
           <b-nav-form>
-          <div id="app1">
-            <div class="form-group has-feedback"> 
-            <input class="input-search form-control" type="text" v-model="query" placeholder="Search" @keyup="searchProduct"/>
-            <ul id="list" v-show="searchResults.length > 0">
-              <li v-for="(item, index) in searchResults" :key="index" @click="showProduct(item)"> <span>{{ item.productName }} in {{item.productCategory}} </span> </li> 
-            </ul>
+            <div id="app1">
+              <div class="form-group has-feedback">
+                <input class="input-search form-control" type="text" v-model="query" placeholder="Search"
+                  @keyup="searchProduct" />
+                <ul id="list" v-show="searchResults.length > 0">
+                  <li v-for="(item, index) in searchResults" :key="index" @click="showProduct(item)">
+                    <span>{{ item.productName }} in {{ item.productCategory }}
+                    </span>
+                  </li>
+                </ul>
+              </div>
             </div>
-          </div>
           </b-nav-form>
 
-          <b-avatar :badge="showCartCount()" variant="" badge-variant="warning" src="https://cdn4.iconfinder.com/data/icons/shopping-35/24/Cart-1-512.png"> </b-avatar>
+          <b-avatar :badge="showCartCount()" variant="" badge-variant="warning"
+            src="https://cdn4.iconfinder.com/data/icons/shopping-35/24/Cart-1-512.png">
+          </b-avatar>
 
           <b-nav-item-dropdown class="mx-2" right>
-          <div v-if="cartItems.length > 0">
-          <b-dropdown-item v-for="item in cartItems" :key="item.id">
-            <span @click="showProduct(item)">
-            {{item.productName}}
-            </span>
-            <span @click="removeItemFromCart(item)">
-              <b-icon icon="trash"></b-icon>
-            </span>
-            <b-dropdown-divider></b-dropdown-divider>
-          </b-dropdown-item>
-         
-          </div>
-          <div v-else>
-            <b-dropdown-item>Cart is empty</b-dropdown-item>
-          </div>
-        </b-nav-item-dropdown>
+            <div v-if="cartItems.length > 0">
+              <b-dropdown-item v-for="item in cartItems" :key="item.id">
+                <span @click="showProduct(item)">
+                  {{ item.productName }}
+                </span>
+                <span @click="removeItemFromCart(item)">
+                  <b-icon icon="trash"></b-icon>
+                </span>
+                <b-dropdown-divider></b-dropdown-divider>
+              </b-dropdown-item>
+            </div>
+            <div v-else>
+              <b-dropdown-item>Cart is empty</b-dropdown-item>
+            </div>
+          </b-nav-item-dropdown>
 
           <b-nav-item-dropdown right class="mx-2">
             <template #button-content>
@@ -78,16 +83,15 @@ export default {
       this.$router.push("/");
     },
     searchProduct() {
-      ( this.allProducts && this.query && this.query.length > 2 )
+      this.allProducts && this.query && this.query.length > 2
         ? (this.searchResults = this.allProducts.filter(
             (el) => el.productName.toLowerCase().indexOf(this.query) != -1
           ))
         : (this.searchResults = []);
     },
     showProduct(data) {
-      console.log('hkskhskhskh')
       this.query = data.productName;
-      this.$store.commit('query', this.query);
+      this.$store.commit("query", this.query);
       this.searchResults = [];
       this.$router.push(`/products/${data.id}`);
     },
@@ -95,7 +99,7 @@ export default {
       let [mobiles, laptops, appliances] = await Promise.all([
         axios.get("http://localhost:3000/mobiles"),
         axios.get("http://localhost:3000/laptops"),
-        axios.get("http://localhost:3000/electronics")
+        axios.get("http://localhost:3000/electronics"),
       ]);
       this.allProducts = mobiles.data.concat(laptops.data, appliances.data);
     },
@@ -115,11 +119,11 @@ export default {
       this.$store.commit("cartCount", this.cartItems.length.toString());
       this.$store.commit("itemRemoved", data);
     },
-    redirectToHome () {
-      if (this.$router.currentRoute.path == '/home') return
+    redirectToHome() {
+      if (this.$router.currentRoute.path == "/home") return;
       this.$store.state.query.data = null;
-      this.$router.push('/home')
-    }
+      this.$router.push("/home");
+    },
   },
   mounted() {
     let userName = localStorage.getItem("loggedInUser");
@@ -139,11 +143,9 @@ export default {
   background-color: #8a8a83 !important;
   padding: 1% 1%;
 }
-
 #app1 {
   width: 400px;
 }
-
 #list {
   font-size: 12px;
   list-style: none;
@@ -152,23 +154,17 @@ export default {
   background-color: white;
   border-radius: 0 0 5px 5px;
   border: 1px #ccc solid;
-  
 }
-
 #list li {
   display: block;
   padding: 5px 15px;
 }
-
 #list li:hover {
   background-color: #ccc;
-/*   color: white; */
 }
-
 #list li span {
   font-weight: 550;
 }
-
 #list li p {
   margin: 5px 0 0;
 }

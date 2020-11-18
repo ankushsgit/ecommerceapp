@@ -8,8 +8,8 @@
               <a class="ml-auto" href="javascript:void(0)" @click="closeNav()">x</a>
               <router-link @click="changeView('laptops')" to="/laptops">Laptops</router-link>
               <router-link @click="changeView('mobiles')" to="/mobiles">Mobiles</router-link>
-              <router-link @click="changeView('electronicAppliances')" to="/electronicAppliances">Electronic Appliances
-              </router-link>
+              <router-link @click="changeView('electronicAppliances')" to="/electronicAppliances">Electronic Appliances</router-link>
+              <router-link @click="changeView('addProducts')" to="/addProducts" >Add Products</router-link>
             </b-nav>
           </nav>
         </div>

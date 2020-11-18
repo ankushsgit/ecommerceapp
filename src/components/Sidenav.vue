@@ -22,6 +22,12 @@
                 to="/electronicAppliances"
                 >Electronic Appliances</router-link
               >
+              <router-link
+                @click="changeView('addProducts')"
+                to="/addProducts"
+                >Add Products</router-link
+              >
+
             </b-nav>
           </nav>
         </div> 

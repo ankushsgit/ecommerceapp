@@ -7,6 +7,9 @@ export default new Vuex.Store({
  state: {
      cartDetails: {
          count: localStorage.getItem('cartCount')
+     },
+     itemStore : {
+            item: null
      }
  },
  getters: {
@@ -17,6 +20,9 @@ export default new Vuex.Store({
  mutations: {
      cartCount (state, payload) {
          state.cartDetails.count = payload;
+     },
+     itemRemoved (state, payload) {
+         state.itemStore.item = payload;
      }
  },
  actions: {}

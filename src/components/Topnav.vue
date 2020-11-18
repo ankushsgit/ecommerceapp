@@ -11,7 +11,7 @@
         <b-navbar-nav class="ml-auto">
           <b-nav-form>
             <b-form-input size="sm" class="mr-sm-6 mr-5" placeholder="Search" type="text" v-model="query" @keyup="searchProduct" ></b-form-input>
-            <li class="autocomplete-result" v-for="product in searchResults" :key="product.id" @click="showProduct(product)" >
+            <li class="autocomplete autocomplete-result" v-for="product in searchResults" :key="product.id" @click="showProduct(product)" >
                 <small> {{ product.productName }} in {{ product.productCategory }}</small>
             </li>
           </b-nav-form>
@@ -22,13 +22,15 @@
           <b-nav-item-dropdown class="mx-2" right>
           <span v-if="cartItems.length > 0">
           <b-dropdown-item v-for="item in cartItems" :key="item.id">
-            <span @click.stop="goToProductView(item)">
+            <span @click.stop="showProduct(item)">
             {{item.productName}}
             </span>
             <span @click.stop="removeItemFromCart(item)">
               <b-icon icon="trash"></b-icon>
             </span>
+            <b-dropdown-divider></b-dropdown-divider>
           </b-dropdown-item>
+         
           </span>
           <span v-else>
             <b-dropdown-item>Cart is empty</b-dropdown-item>
@@ -86,9 +88,9 @@ export default {
     },
     async productsData() {
       let [mobiles, laptops, appliances] = await Promise.all([
-        axios.get("mobiles.json"),
-        axios.get("laptops.json"),
-        axios.get("electronics.json"),
+        axios.get("http://localhost:3000/mobiles"),
+        axios.get("http://localhost:3000/laptops"),
+        axios.get("http://localhost:3000/electronics")
       ]);
       this.allProducts = mobiles.data.concat(laptops.data, appliances.data);
     },
@@ -97,7 +99,6 @@ export default {
     },
     getCartItems() {
       this.cartItems = JSON.parse(localStorage.getItem("cart"));
-      console.log(this.cartItems);
     },
     showCartCount() {
       return this.$store.getters.cartCount;
@@ -107,6 +108,7 @@ export default {
       localStorage.setItem("cart", JSON.stringify(this.cartItems));
       localStorage.setItem("cartCount", this.cartItems.length.toString());
       this.$store.commit("cartCount", this.cartItems.length.toString());
+      this.$store.commit("itemRemoved", data);
     },
   },
   mounted() {
@@ -128,6 +130,7 @@ export default {
   padding: 1% 1%;
 }
 .autocomplete {
+  flex-basis: 100%;
   position: relative;
   width: 130px;
 }

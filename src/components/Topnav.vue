@@ -4,37 +4,40 @@
       <b-button v-b-toggle.sidebar-no-header>
         <b-icon icon="list" variant="primary"></b-icon>
       </b-button>
-      <b-navbar-brand to="/home" class="ml-3">Amazon.in</b-navbar-brand>
+      <b-navbar-brand class="ml-3" @click="redirectToHome()">Amazon.in</b-navbar-brand>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
           <b-nav-form>
-            <b-form-input size="sm" class="mr-sm-6 mr-5" placeholder="Search" type="text" v-model="query" @keyup="searchProduct" ></b-form-input>
-            <li class="autocomplete autocomplete-result" v-for="product in searchResults" :key="product.id" @click="showProduct(product)" >
-                <small> {{ product.productName }} in {{ product.productCategory }}</small>
-            </li>
+          <div id="app1">
+            <div class="form-group has-feedback"> 
+            <input class="input-search form-control" type="text" v-model="query" placeholder="Search" @keyup="searchProduct"/>
+            <ul id="list" v-show="searchResults.length > 0">
+              <li v-for="(item, index) in searchResults" :key="index" @click="showProduct(item)"> <span>{{ item.productName }} in {{item.productCategory}} </span> </li> 
+            </ul>
+            </div>
+          </div>
           </b-nav-form>
-
 
           <b-avatar :badge="showCartCount()" variant="" badge-variant="warning" src="https://cdn4.iconfinder.com/data/icons/shopping-35/24/Cart-1-512.png"> </b-avatar>
 
           <b-nav-item-dropdown class="mx-2" right>
-          <span v-if="cartItems.length > 0">
+          <div v-if="cartItems.length > 0">
           <b-dropdown-item v-for="item in cartItems" :key="item.id">
-            <span @click.stop="showProduct(item)">
+            <span @click="showProduct(item)">
             {{item.productName}}
             </span>
-            <span @click.stop="removeItemFromCart(item)">
+            <span @click="removeItemFromCart(item)">
               <b-icon icon="trash"></b-icon>
             </span>
             <b-dropdown-divider></b-dropdown-divider>
           </b-dropdown-item>
          
-          </span>
-          <span v-else>
+          </div>
+          <div v-else>
             <b-dropdown-item>Cart is empty</b-dropdown-item>
-          </span>
+          </div>
         </b-nav-item-dropdown>
 
           <b-nav-item-dropdown right class="mx-2">
@@ -58,7 +61,7 @@ export default {
   data() {
     return {
       userName: "",
-      query: "",
+      query: this.$store.state.query.data,
       products: [],
       searchResults: [],
       cartItems: [],
@@ -75,14 +78,16 @@ export default {
       this.$router.push("/");
     },
     searchProduct() {
-      this.allProducts && this.query && this.query.length > 1
+      ( this.allProducts && this.query && this.query.length > 2 )
         ? (this.searchResults = this.allProducts.filter(
             (el) => el.productName.toLowerCase().indexOf(this.query) != -1
           ))
         : (this.searchResults = []);
     },
     showProduct(data) {
+      console.log('hkskhskhskh')
       this.query = data.productName;
+      this.$store.commit('query', this.query);
       this.searchResults = [];
       this.$router.push(`/products/${data.id}`);
     },
@@ -110,6 +115,11 @@ export default {
       this.$store.commit("cartCount", this.cartItems.length.toString());
       this.$store.commit("itemRemoved", data);
     },
+    redirectToHome () {
+      if (this.$router.currentRoute.path == '/home') return
+      this.$store.state.query.data = null;
+      this.$router.push('/home')
+    }
   },
   mounted() {
     let userName = localStorage.getItem("loggedInUser");
@@ -129,29 +139,37 @@ export default {
   background-color: #8a8a83 !important;
   padding: 1% 1%;
 }
-.autocomplete {
-  flex-basis: 100%;
-  position: relative;
-  width: 130px;
+
+#app1 {
+  width: 400px;
 }
 
-.autocomplete-results {
-  padding: 0;
-  margin: 0;
-  border: 1px solid #eeeeee;
-  height: 120px;
-  overflow: auto;
-}
-
-.autocomplete-result {
+#list {
+  font-size: 12px;
   list-style: none;
-  text-align: left;
-  padding: 4px 2px;
-  cursor: pointer;
+  margin: 0;
+  padding: 5px 0;
+  background-color: white;
+  border-radius: 0 0 5px 5px;
+  border: 1px #ccc solid;
+  
 }
 
-.autocomplete-result:hover {
-  background-color: #4aae9b;
-  color: white;
+#list li {
+  display: block;
+  padding: 5px 15px;
+}
+
+#list li:hover {
+  background-color: #ccc;
+/*   color: white; */
+}
+
+#list li span {
+  font-weight: 550;
+}
+
+#list li p {
+  margin: 5px 0 0;
 }
 </style>

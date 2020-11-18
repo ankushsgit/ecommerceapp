@@ -10,6 +10,9 @@ export default new Vuex.Store({
      },
      itemStore : {
             item: null
+     },
+     query : {
+         data: null
      }
  },
  getters: {
@@ -23,6 +26,9 @@ export default new Vuex.Store({
      },
      itemRemoved (state, payload) {
          state.itemStore.item = payload;
+     },
+     query (state, payload) {
+         state.query.data = payload;
      }
  },
  actions: {}

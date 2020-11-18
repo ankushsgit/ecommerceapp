@@ -1,63 +1,46 @@
 <template>
   <div>
-    <b-navbar toggleable="lg" type="dark" variant="primary">
-      <b-button v-b-toggle.sidebar-no-header
-        ><b-icon icon="bar-chart-fill" flip-h rotate="90"></b-icon
-      ></b-button>
-      <b-navbar-brand to="/home">Amazon </b-navbar-brand>
-
+    <b-navbar toggleable="lg" type="light" variant="primary">
+      <b-button v-b-toggle.sidebar-no-header>
+        <b-icon icon="list" variant="primary"></b-icon>
+      </b-button>
+      <b-navbar-brand class="ml-3" @click="redirectToHome()">Amazon.in</b-navbar-brand>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
       <b-collapse id="nav-collapse" is-nav>
-        <div class="auto-complete">
-          <b-input-group size="md" class="mb-2 col-md-7">
-            <b-input-group-prepend is-text>
-              <b-icon icon="search"></b-icon>
-            </b-input-group-prepend>
-
-            <b-form-input
-              type="text"
-              placeholder="Search"
-              v-model="query"
-              @keyup="searchProduct"
-            ></b-form-input>
-            <span>
-              <li
-                class="autocomplete-result"
-                v-for="product in searchResults"
-                :key="product._id"
-                @click="showProduct(product)"
-              >
-                <small>
-                  {{ product.productName }} in
-                  {{ product.productCategory }}</small
-                >
-              </li>
-            </span>
-          </b-input-group>
-        </div>
-
         <b-navbar-nav class="ml-auto">
-          <b-avatar
-            :badge="showCartCount()"
-            variant=""
-            badge-variant="warning"
-            src="https://cdn4.iconfinder.com/data/icons/shopping-35/24/Cart-1-512.png"
-          ></b-avatar>
-          &nbsp;&nbsp;
-          <b-nav-item-dropdown>
-            <span v-if="cartItems.length > 0">
-            <a v-for="item in cartItems" :key="item._id">
-              <p  style="width:500px"> {{ item.productName }} | <span class="ml-auto" @click.stop="removeItemFromCart(item)"><b-icon icon="trash"></b-icon></span> </p></a>
-            </span>
-            <span v-else>
-              <p>Cart is empty</p>
-            </span>
-          </b-nav-item-dropdown>
-        </b-navbar-nav>
+          <b-nav-form>
+          <div id="app1">
+            <div class="form-group has-feedback"> 
+            <input class="input-search form-control" type="text" v-model="query" placeholder="Search" @keyup="searchProduct"/>
+            <ul id="list" v-show="searchResults.length > 0">
+              <li v-for="(item, index) in searchResults" :key="index" @click="showProduct(item)"> <span>{{ item.productName }} in {{item.productCategory}} </span> </li> 
+            </ul>
+            </div>
+          </div>
+          </b-nav-form>
 
-        <b-navbar-nav class="ml-auto">
-          <b-nav-item-dropdown right>
+          <b-avatar :badge="showCartCount()" variant="" badge-variant="warning" src="https://cdn4.iconfinder.com/data/icons/shopping-35/24/Cart-1-512.png"> </b-avatar>
+
+          <b-nav-item-dropdown class="mx-2" right>
+          <div v-if="cartItems.length > 0">
+          <b-dropdown-item v-for="item in cartItems" :key="item.id">
+            <span @click="showProduct(item)">
+            {{item.productName}}
+            </span>
+            <span @click="removeItemFromCart(item)">
+              <b-icon icon="trash"></b-icon>
+            </span>
+            <b-dropdown-divider></b-dropdown-divider>
+          </b-dropdown-item>
+         
+          </div>
+          <div v-else>
+            <b-dropdown-item>Cart is empty</b-dropdown-item>
+          </div>
+        </b-nav-item-dropdown>
+
+          <b-nav-item-dropdown right class="mx-2">
             <template #button-content>
               <span>{{ userName }}</span>
             </template>
@@ -78,7 +61,7 @@ export default {
   data() {
     return {
       userName: "",
-      query: "",
+      query: this.$store.state.query.data,
       products: [],
       searchResults: [],
       cartItems: [],
@@ -95,22 +78,24 @@ export default {
       this.$router.push("/");
     },
     searchProduct() {
-      this.allProducts && this.query && this.query.length > 1
+      ( this.allProducts && this.query && this.query.length > 2 )
         ? (this.searchResults = this.allProducts.filter(
             (el) => el.productName.toLowerCase().indexOf(this.query) != -1
           ))
         : (this.searchResults = []);
     },
     showProduct(data) {
+      console.log('hkskhskhskh')
       this.query = data.productName;
+      this.$store.commit('query', this.query);
       this.searchResults = [];
-      this.$router.push(`/products/${data._id}`);
+      this.$router.push(`/products/${data.id}`);
     },
     async productsData() {
       let [mobiles, laptops, appliances] = await Promise.all([
-        axios.get("mobiles.json"),
-        axios.get("laptops.json"),
-        axios.get("electronics.json"),
+        axios.get("http://localhost:3000/mobiles"),
+        axios.get("http://localhost:3000/laptops"),
+        axios.get("http://localhost:3000/electronics")
       ]);
       this.allProducts = mobiles.data.concat(laptops.data, appliances.data);
     },
@@ -119,16 +104,21 @@ export default {
     },
     getCartItems() {
       this.cartItems = JSON.parse(localStorage.getItem("cart"));
-      console.log(this.cartItems);
     },
     showCartCount() {
       return this.$store.getters.cartCount;
     },
-    removeItemFromCart (data) {
-      this.cartItems = this.cartItems.filter(item => item._id != data._id)
-      localStorage.setItem('cart', JSON.stringify(this.cartItems))
-      localStorage.setItem('cartCount', this.cartItems.length.toString())
-      this.$store.commit('cartCount', this.cartItems.length.toString())
+    removeItemFromCart(data) {
+      this.cartItems = this.cartItems.filter((item) => item.id != data.id);
+      localStorage.setItem("cart", JSON.stringify(this.cartItems));
+      localStorage.setItem("cartCount", this.cartItems.length.toString());
+      this.$store.commit("cartCount", this.cartItems.length.toString());
+      this.$store.commit("itemRemoved", data);
+    },
+    redirectToHome () {
+      if (this.$router.currentRoute.path == '/home') return
+      this.$store.state.query.data = null;
+      this.$router.push('/home')
     }
   },
   mounted() {
@@ -138,7 +128,7 @@ export default {
     this.productsData();
     // eslint-disable-next-line no-unused-vars
     this.$root.$on("bv::dropdown::show", (bvEvent) => {
-      this.getCartItems()
+      this.getCartItems();
     });
   },
 };
@@ -149,28 +139,37 @@ export default {
   background-color: #8a8a83 !important;
   padding: 1% 1%;
 }
-.autocomplete {
-  position: relative;
-  width: 130px;
+
+#app1 {
+  width: 400px;
 }
 
-.autocomplete-results {
-  padding: 0;
-  margin: 0;
-  border: 1px solid #eeeeee;
-  height: 120px;
-  overflow: auto;
-}
-
-.autocomplete-result {
+#list {
+  font-size: 12px;
   list-style: none;
-  text-align: left;
-  padding: 4px 2px;
-  cursor: pointer;
+  margin: 0;
+  padding: 5px 0;
+  background-color: white;
+  border-radius: 0 0 5px 5px;
+  border: 1px #ccc solid;
+  
 }
 
-.autocomplete-result:hover {
-  background-color: #4aae9b;
-  color: white;
+#list li {
+  display: block;
+  padding: 5px 15px;
+}
+
+#list li:hover {
+  background-color: #ccc;
+/*   color: white; */
+}
+
+#list li span {
+  font-weight: 550;
+}
+
+#list li p {
+  margin: 5px 0 0;
 }
 </style>

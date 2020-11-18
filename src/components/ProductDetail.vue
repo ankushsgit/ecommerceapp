@@ -1,9 +1,8 @@
 <template>
   <div>
-    <!-- <Navbar /> -->
     <Topnav />
     <Sidenav />
-    <div class="product-details">
+    <div class="product-details mt-4">
       <div class="container">
         <div class="row mb-3">
           <div class="col-sm-4">
@@ -38,12 +37,8 @@
                     }}</span>
                   </li>
                 </ul>
-                <button
-                  class="btn btn-primary"
-                  v-on:click="addToCart(productData)"
-                >
-                  Add to Cart
-                </button>
+                <button class="btn btn-primary" v-on:click="addToCart(productData)" v-if="!this.isAdded"> Add to Cart </button>
+                <button class="btn btn-secondary" disabled v-else> Added </button>
               </div>
             </div>
           </div>
@@ -100,11 +95,12 @@ export default {
       productData: {},
       productId: this.$route.params.id,
       allProducts: [],
+      isAdded: null
     };
   },
   watch: {
+    // eslint-disable-next-line no-unused-vars
     $route(to, from) {
-      console.log(to, from);
       this.productId = to.params.id;
       let productsArrayFunction = this.productsData.bind(this);
       productsArrayFunction();
@@ -116,11 +112,12 @@ export default {
       localCartData
         ? (localCartData = JSON.parse(localCartData))
         : (localCartData = []);
-      let duplicate = localCartData.some(item => item._id === data._id)
+      let duplicate = localCartData.some(item => item.id === data.id)
       !duplicate ? localCartData.push(data) : console.log('duplicate entry')
       localStorage.setItem("cart", JSON.stringify(localCartData));
       localStorage.setItem("cartCount", localCartData.length.toString());
       this.$store.commit('cartCount', localCartData.length.toString())
+      this.checkAddedProducts();
     },
     async productsData() {
       let [mobiles, laptops, appliances] = await Promise.all([
@@ -130,13 +127,21 @@ export default {
       ]);
       this.allProducts = mobiles.data.concat(laptops.data, appliances.data);
       this.productData = this.allProducts.find(
-        (el) => el._id == this.productId
+        (el) => el.id == this.productId
       );
     },
+    checkAddedProducts () {
+    let added = localStorage.getItem('cart');
+    added = JSON.parse(added);
+    let isAdded = added.find(item => item.id == this.$route.params.id )
+    isAdded ? this.isAdded = true : false; 
+    }
   },
   mounted() {
     let productsArrayFunction = this.productsData.bind(this);
     productsArrayFunction();
+    // show added if added
+    this.checkAddedProducts();
   },
 };
 </script>

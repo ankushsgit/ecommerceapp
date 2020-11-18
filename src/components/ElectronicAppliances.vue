@@ -1,14 +1,14 @@
 <template>
   <div>
     <Navbar />
-    <div class="row">
+    <div class="row mx-2 my-2">
       <div
-        class="col-md-3"
+        class="col-md-3 outerview"
         v-for="productData in productsList"
         :key="productData.id"
       >
-        <div class="cardTemplate">
-          <div class="card mb-4 shadow-sm">
+        <div class="cardTemplate outer1">
+          <div class="card mb-4 outer2">
             <img
               class="card-img-top mt-2"
               v-bind:src="productData.productImage"
@@ -28,13 +28,8 @@
                   >
                     View
                   </button>
-                  <button
-                    type="button"
-                    class="btn btn-sm btn-outline-secondary"
-                    v-on:click="addToCart(productData)"
-                  >
-                    Add to Cart
-                  </button>
+                  <button v-if="!productData.isAdded" type="button" class="btn btn-sm btn-outline-secondary" v-on:click="addToCart(productData)"> Add to Cart </button>
+                  <button class="btn btn-sm btn-outline-secondary" disabled v-else>Added</button>
                 </div>
               </div>
             </div>
@@ -58,27 +53,52 @@ export default {
       productsList: [],
     };
   },
+    watch : {
+    '$store.state.itemStore.item' : function () {
+      this.productsList.map(item => {
+        (item.id == this.$store.state.itemStore.item.id) ? item.isAdded = false : console.log('do nothing');
+      })
+      this.productsList = [...this.productsList];
+    }
+  },
   methods: {
     addToCart(data) {
       let localCartData = localStorage.getItem("cart");
       localCartData
         ? (localCartData = JSON.parse(localCartData))
         : (localCartData = []);
-      let duplicate = localCartData.some(item => item._id === data._id)
-      !duplicate ? localCartData.push(data) : console.log('duplicate entry')
+      let duplicate = localCartData.some((item) => item.id === data.id);
+      !duplicate ? localCartData.push(data) : console.log("duplicate entry");
       localStorage.setItem("cart", JSON.stringify(localCartData));
       localStorage.setItem("cartCount", localCartData.length.toString());
-      this.$store.commit('cartCount', localCartData.length.toString())
+      this.$store.commit("cartCount", localCartData.length.toString());
+      this.productsList.map((item) => {
+        item.id == data.id ? (item.isAdded = true) : console.log("do nothing");
+      });
+      this.productsList = [...this.productsList];
     },
-    getElectronicesData() {
-      axios
-        .get("http://localhost:3000/electronicAppliances")
-        .then((response) => (this.productsList = response.data));
+    checkAddedProducts() {
+      let added = localStorage.getItem("cart");
+      added = JSON.parse(added);
+      this.productsList.map((item) => (item.isAdded = false));
+      this.productsList.map((item) => {
+        added.map((subItem) => {
+          item.id == subItem.id
+            ? (item.isAdded = true)
+            : console.log("do nothing");
+        });
+      });
     },
+    async getElectronicesData() {
+      let mobiles = await axios.get("http://localhost:3000/electronics");
+      this.productsList = mobiles.data;
+      this.checkAddedProducts();
+    },
+
     navigateProductDetail(data) {
       this.$router.push({
         name: "productDetails",
-        params: { id: data._id },
+        params: { id: data.id },
       });
     },
   },
